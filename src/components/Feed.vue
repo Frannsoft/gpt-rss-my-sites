@@ -7,25 +7,27 @@
     </div>
     <ul v-if="!loading">
       <template v-for="(group, date) in groups" :key="date">
-        <li class="group-heading">{{ formatDate(date) }}</li>
-        <li v-for="item in group" :key="item.link" class="post">
-          <div class="post-info">
-            <a :href="
-              item.source === 'Hacker News'
-                ? getHackerNewsCommentsUrl(item.description)
-                : item.link
-            " target="_blank">
-              <div class="item-top">
-                <img :src="getIcon(item.source)" :alt="item.source" />
-                <span>{{ item.title }}</span>
+        <li class="group-heading" @click="toggleGroup(date)">{{ formatDate(date) }}</li>
+        <div class="group-container" :class="{ 'hidden': this.groupHidden[date] }">
+          <li v-for="item in group" :key="item.link" class="post">
+            <div class="post-info">
+              <a :href="
+                item.source === 'Hacker News'
+                  ? getHackerNewsCommentsUrl(item.description)
+                  : item.link
+              " target="_blank">
+                <div class="item-top">
+                  <img :src="getIcon(item.source)" :alt="item.source" />
+                  <span>{{ item.title }}</span>
+                </div>
+              </a>
+              <div class="post-text">
+                <p class="post-description" v-if="item.source !== 'Hacker News'" v-html="sanitizeHtml(item.description)">
+                </p>
               </div>
-            </a>
-            <div class="post-text">
-              <p class="post-description" v-if="item.source !== 'Hacker News'" v-html="sanitizeHtml(item.description)">
-              </p>
             </div>
-          </div>
-        </li>
+          </li>
+        </div>
       </template>
     </ul>
   </div>
@@ -39,7 +41,8 @@ export default {
     return {
       items: [],
       groups: {},
-      loading: true
+      loading: true,
+      groupHidden: {}
     };
   },
   async created() {
@@ -83,9 +86,21 @@ export default {
       }
     }
     this.groups = groups;
+    this.groupHidden = Object.keys(groups).reduce((obj, date) => {
+      obj[date] = false;
+      return obj;
+    }, {});
+
     this.loading = false;
   },
   methods: {
+    toggleGroup(date) {
+      this.groupHidden[date] = !this.groupHidden[date];
+      const groupItems = this.groups[date];
+      for (const item of groupItems) {
+        item.hidden = this.groupHidden[date];
+      }
+    },
     getHackerNewsLinkService(link) {
       return getHackerNewsLink(link);
     },
@@ -164,7 +179,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color:var(--vt-c-black);
+  background-color: var(--vt-c-black);
   font-style: italic;
   z-index: 999;
 }
@@ -188,11 +203,15 @@ export default {
   }
 }
 
-
 .group-heading {
   font-size: large;
+  cursor: pointer;
   margin: 2rem 0 0 0;
   font-weight: bold;
+}
+
+.group-heading:hover {
+  text-decoration: underline;
 }
 
 ul {
@@ -248,6 +267,17 @@ ul {
   border-bottom: 1px solid #e2e8f0;
 }
 
+.container {
+  transition: all 0.5s ease-in-out;
+  opacity: 1;
+}
+
+.group-container.hidden {
+  transform: translateY(-50px);
+  opacity: 0;
+  display: none;
+}
+
 .post-info {
   display: flex;
   flex-direction: column;
@@ -284,4 +314,5 @@ ul {
 
 .post-list li:hover {
   background-color: #f7fafc;
-}</style>
+}
+</style>
