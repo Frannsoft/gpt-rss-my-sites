@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "dompurify": "^3.0.1",
+    "eslint": "^8.37.0",
     "vue": "^3.2.26"
   },
   "devDependencies": {
