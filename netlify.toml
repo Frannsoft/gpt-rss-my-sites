@@ -1,0 +1,8 @@
+[build]
+  publish = "dist"
+  command = "npm run build"
+  # Uncomment the following line if you're using Vue Router
+  # rewrite = "src/rewrites/netlify.toml"
+
+[dev]
+  command = "npm run serve"
