@@ -2,8 +2,8 @@
   <div>
     <h1>RSS Feeds</h1>
     <ul>
-      <template v-for="(group, date) in groups">
-        <li class="group-heading" :key="date">{{ formatDate(date) }}</li>
+      <template v-for="(group, date) in groups" :key="date">
+        <li class="group-heading">{{ formatDate(date) }}</li>
         <li v-for="item in group" :key="item.link" class="post">
           <div class="post-info">
             <a
