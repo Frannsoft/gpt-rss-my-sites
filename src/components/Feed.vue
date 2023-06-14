@@ -52,7 +52,7 @@ export default {
       'https://hnrss.org/frontpage',
     ];
     const rssPromises = rssUrls.map((url) =>
-      fetch(url)
+      fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`)
     );
     const rssResponses = await Promise.all(rssPromises);
     const rssTexts = await Promise.all(
