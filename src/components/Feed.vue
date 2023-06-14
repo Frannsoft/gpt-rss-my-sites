@@ -51,29 +51,15 @@ export default {
       'https://www.nintendolife.com/feeds/latest',
       'https://hnrss.org/frontpage',
     ];
-    // const rssPromises = rssUrls.map((url) =>
-    //   //fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`)
-    //   fetch(`.netlify/functions/fetch-data.js`, {
-    //     method: 'GET'
-    //   })
-    // );
-    // const rssResponses = await Promise.all(rssPromises);
-    // const rssTexts = await Promise.all(
-    //   rssResponses.map(async (response) => {
-    //     const te = await response.text();
-    //     console.log(te);
-    //     return te;
-    //   })
-    // );
-    const rssTexts = await fetch(`.netlify/functions/fetch-rss`, {method: 'GET'});
+
+    const rssTexts = await fetch(`.netlify/functions/fetch-rss`, { method: 'GET' });
     const rssData = await rssTexts.json();
 
-    console.log(rssData);
     const rssFeeds = rssData.data.map((text, index) => ({
       source: this.getSourceFromUrl(rssUrls[index]),
       feed: new window.DOMParser().parseFromString(text, 'text/xml'),
     }));
-    
+
     const items = rssFeeds.flatMap(({ source, feed }) =>
       Array.from(feed.querySelectorAll('item')).map((item) => ({
         source,
@@ -83,7 +69,7 @@ export default {
         pubDate: item.querySelector('pubDate').textContent,
       }))
     );
-    
+
     const sortedItems = items.sort(
       (a, b) => new Date(b.pubDate) - new Date(a.pubDate)
     );
