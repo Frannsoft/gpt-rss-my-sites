@@ -66,7 +66,7 @@ export default {
     //   })
     // );
     const rssTexts = await fetch(`.netlify/functions/fetch-rss`, {method: 'GET'});
-    const rssData = await rssTexts.text();
+    const rssData = await rssTexts.json();
 
     console.log(rssData);
     const rssFeeds = rssData.map((text, index) => ({
