@@ -46,25 +46,27 @@ export default {
     };
   },
   async created() {
-    const rssUrls = [
-      'https://feeds.a.dj.com/rss/RSSMarketsMain.xml',
-      'https://www.nintendolife.com/feeds/latest',
-      'https://hnrss.org/frontpage',
-    ];
-    const rssPromises = rssUrls.map((url) =>
-      //fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`)
-      fetch(`.netlify/functions/fetch-data.js`, {
-        method: 'GET'
-      })
-    );
-    const rssResponses = await Promise.all(rssPromises);
-    const rssTexts = await Promise.all(
-      rssResponses.map(async (response) => {
-        const te = await response.text();
-        console.log(te);
-        return te;
-      })
-    );
+    // const rssUrls = [
+    //   'https://feeds.a.dj.com/rss/RSSMarketsMain.xml',
+    //   'https://www.nintendolife.com/feeds/latest',
+    //   'https://hnrss.org/frontpage',
+    // ];
+    // const rssPromises = rssUrls.map((url) =>
+    //   //fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`)
+    //   fetch(`.netlify/functions/fetch-data.js`, {
+    //     method: 'GET'
+    //   })
+    // );
+    // const rssResponses = await Promise.all(rssPromises);
+    // const rssTexts = await Promise.all(
+    //   rssResponses.map(async (response) => {
+    //     const te = await response.text();
+    //     console.log(te);
+    //     return te;
+    //   })
+    // );
+    const rssTexts = await fetch(`netlify/functions/fetch-data`, {method: 'GET'});
+    console.log(rssTexts);
     const rssFeeds = rssTexts.map((text, index) => ({
       source: this.getSourceFromUrl(rssUrls[index]),
       feed: new window.DOMParser().parseFromString(text, 'text/xml'),
