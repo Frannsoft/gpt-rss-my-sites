@@ -52,7 +52,7 @@ export default {
       'https://hnrss.org/frontpage',
     ];
     const rssPromises = rssUrls.map((url) =>
-      fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`)
+      fetch(url)
     );
     const rssResponses = await Promise.all(rssPromises);
     const rssTexts = await Promise.all(
@@ -64,6 +64,7 @@ export default {
       source: this.getSourceFromUrl(rssUrls[index]),
       feed: new window.DOMParser().parseFromString(text, 'text/xml'),
     }));
+    
     const items = rssFeeds.flatMap(({ source, feed }) =>
       Array.from(feed.querySelectorAll('item')).map((item) => ({
         source,
@@ -73,6 +74,7 @@ export default {
         pubDate: item.querySelector('pubDate').textContent,
       }))
     );
+    
     const sortedItems = items.sort(
       (a, b) => new Date(b.pubDate) - new Date(a.pubDate)
     );
