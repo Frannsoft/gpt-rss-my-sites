@@ -69,7 +69,7 @@ export default {
     const rssData = await rssTexts.json();
 
     console.log(rssData);
-    const rssFeeds = rssData.map((text, index) => ({
+    const rssFeeds = rssData.data.map((text, index) => ({
       source: this.getSourceFromUrl(rssUrls[index]),
       feed: new window.DOMParser().parseFromString(text, 'text/xml'),
     }));

@@ -13,12 +13,12 @@ exports.handler = async function (event, context) {
       const rssResponses = await Promise.all(rssPromises);
       const rssTexts = await Promise.all(
         rssResponses.map(async (response) => {
-          return await response.text();;
+          return await response.text();
         })
       );
 
     return {
         statusCode: 200,
-        body: rssTexts
+        body: JSON.stringify({data: rssTexts})
     };
 };
