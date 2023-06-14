@@ -52,12 +52,17 @@ export default {
       'https://hnrss.org/frontpage',
     ];
     const rssPromises = rssUrls.map((url) =>
-      fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`)
+      //fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`)
+      fetch(`.netlify/functions/fetch-data.js`, {
+        method: 'GET'
+      })
     );
     const rssResponses = await Promise.all(rssPromises);
     const rssTexts = await Promise.all(
       rssResponses.map(async (response) => {
-        return await response.text();
+        const te = await response.text();
+        console.log(te);
+        return te;
       })
     );
     const rssFeeds = rssTexts.map((text, index) => ({
