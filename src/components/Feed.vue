@@ -46,11 +46,11 @@ export default {
     };
   },
   async created() {
-    // const rssUrls = [
-    //   'https://feeds.a.dj.com/rss/RSSMarketsMain.xml',
-    //   'https://www.nintendolife.com/feeds/latest',
-    //   'https://hnrss.org/frontpage',
-    // ];
+    const rssUrls = [
+      'https://feeds.a.dj.com/rss/RSSMarketsMain.xml',
+      'https://www.nintendolife.com/feeds/latest',
+      'https://hnrss.org/frontpage',
+    ];
     // const rssPromises = rssUrls.map((url) =>
     //   //fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`)
     //   fetch(`.netlify/functions/fetch-data.js`, {
